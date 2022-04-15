@@ -2,13 +2,15 @@ import { createStore,applyMiddleware,compose,combineReducers } from "redux";
 import thunk from 'redux-thunk';
 
 
-import {appReducer} from './reducer';
+import {settingReducer} from './reducers/settingReducer';
+import {weatherReducer} from './reducers/weatherReducer';
 
 const middlewares = [thunk];
 const initialState = {};
 
 const rootReducer = combineReducers({
-        reducer:appReducer,
+        settingReducer,
+        weatherReducer
 });
 
 

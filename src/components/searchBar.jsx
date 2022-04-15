@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme=>({
 const SearchBar = ({selectCityHandler,currentCity}) => {
 
     const classes = useStyles();
-    const [value,setValue] = React.useState(currentCity ?  currentCity.LocalizedName : '');
+    const [value,setValue] = React.useState('');
     const [suggestions,setSuggestions] = React.useState([]);
     
     const handleChange = async(e)=>{

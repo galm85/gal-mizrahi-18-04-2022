@@ -22,7 +22,7 @@ import { Switch } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
 import { useDispatch,useSelector } from 'react-redux';
-import { handleDarkMode } from '../redux/actions';
+import { handleDarkMode } from '../redux/actions/settingActions';
 
 
 
@@ -69,7 +69,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function Navbar() {
 
 
-  const darkMode = useSelector(state=>state.reducer.darkMode);
+  const darkMode = useSelector(state=>state.settingReducer.darkMode);
   const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = React.useState(null);

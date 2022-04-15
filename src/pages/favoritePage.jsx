@@ -1,20 +1,49 @@
-import { Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import * as React from 'react';
+import { useDispatch,useSelector } from 'react-redux';
+import FavoriteCard from '../components/favoriteCard';
+import { getAllFavorites, removeFromFavorites } from '../redux/actions/settingActions';
+
 
 const Favorite = () => {
 
 
-    const [city,setCity] = React.useState('tel-aviv');
-    const [search,setSearch] = React.useState(null);
+    const dispatch = useDispatch();
+    const favorites = useSelector(state=>state.settingReducer.favorites);
     
 
-    return ( 
-       <div className="home-container">
+    
 
-            <div className="search-bar">
-                <input type="text" name="search" value={search}  />
-                <Button>Search</Button>
-            </div>
+
+    React.useEffect(()=>{
+        
+        dispatch(getAllFavorites());
+
+    },[])
+
+    return ( 
+       <div className="favorite-container">
+           <Grid container>
+      
+        {(favorites && favorites.length>0)  ? 
+        <>
+            {favorites.map((fav,index)=>(
+                <Grid item sm={5} md={2} key={index}>
+                    <FavoriteCard city={fav} />
+                </Grid>
+            ))}
+        </>
+        :
+        <>
+            <h1>No Favorites yet</h1>
+        </>  
+    }
+
+
+
+           </Grid>
+        
+            
 
        </div>
      );

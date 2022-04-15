@@ -9,7 +9,7 @@ import {useSelector} from 'react-redux';
 
 function App() {
 
-  const darkMode = useSelector(state=>state.reducer.darkMode);  
+  const darkMode = useSelector(state=>state.settingReducer.darkMode);  
 
   return (
     <div className="app">
