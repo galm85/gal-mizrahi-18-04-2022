@@ -9,6 +9,15 @@ export const setCurrentCity = (city)=>async(dispatch)=>{
     })
 }
 
+
+export const getCityByLocation = (lat,long) => async(dispatch)=>{
+    const res = await axios.get(`http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=mksSHBCIp7xcjFWSgCFksTh6rM3HjwuF&q=${lat},${long}`);
+    dispatch({
+        type:'getCityByLocation',
+        payload:res.data
+    })
+}
+
 export const getFiveDays = (city,metric) => async(dispatch)=>{
     const res = await axios.get(`http://dataservice.accuweather.com/forecasts/v1/daily/5day/${city.Key}?apikey=mksSHBCIp7xcjFWSgCFksTh6rM3HjwuF&metric=${metric}`);
     dispatch({

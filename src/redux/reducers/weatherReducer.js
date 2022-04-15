@@ -2,7 +2,7 @@ const initialState = {
     currentCity:null,
     fiveDays:null,
     currentCondition:null,
-    loader:false,
+    usingLocation:false,
     suggestions:null,
 }
 
@@ -10,16 +10,25 @@ const initialState = {
 export const weatherReducer = (state=initialState,action)=>{
     switch(action.type){
 
+        case 'getCityByLocation':
+            return{
+                ...state,
+                currentCity:action.payload,
+                usingLocation:true
+            }
+
         case 'setCurrentCity':
              return {
                 ...state,
-                currentCity:action.payload
+                currentCity:action.payload,
+                usingLocation:false
             }
 
         case 'getFiveDays':
             return{
                 ...state,
-                fiveDays:action.payload
+                fiveDays:action.payload,
+
             }
 
         case 'getCurrentCondition':
@@ -28,7 +37,7 @@ export const weatherReducer = (state=initialState,action)=>{
                 currentCondition:action.payload
             }
 
-        case 'aautoComplate':
+        case 'autoComplate':
             return{
                 ...state,
                 suggestions:action.payload

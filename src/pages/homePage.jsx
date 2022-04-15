@@ -3,12 +3,13 @@ import axios from 'axios';
 import * as React from 'react';
 import SearchBar from '../components/searchBar';
 import {makeStyles} from '@mui/styles';
-import {fiveDaysDemo,currentCityDataDemo,currentCityDemo} from '../data/data';
 import {useDispatch, useSelector} from 'react-redux';
-import { AddToFavorite } from '../redux/actions/settingActions';
-import { getCurrentCondition,getFiveDays, setCurrentCity } from '../redux/actions/weatherActions';
+import { AddToFavorite, removeFromFavorites } from '../redux/actions/settingActions';
+import { getCurrentCondition,getFiveDays, setCurrentCity,getCityByLocation} from '../redux/actions/weatherActions';
 import DayCard from '../components/dayCard';
-import { padding } from '@mui/system';
+import { useLocation } from 'react-router-dom';
+import DetailsModal from '../components/detailsModal';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const useStyles = makeStyles(theme=>({
     homeContainer:{
@@ -68,10 +69,9 @@ const Home = () => {
 
     const dispatch = useDispatch();
     const classes = useStyles();
-
-    const {currentCity,fiveDays,currentCondition} = useSelector(state=>state.weatherReducer);
+    const location = useLocation();
+    const {currentCity,fiveDays,currentCondition,usingLocation} = useSelector(state=>state.weatherReducer);
     const {favorites,metric} = useSelector(state=>state.settingReducer);
-
    
 
     const inFavorites = (city)=>{
@@ -86,17 +86,32 @@ const Home = () => {
 
 
     const selectCityHandler = async(city)=>{
-        
         dispatch(setCurrentCity(city));
-       await dispatch(getCurrentCondition(city));
-       await dispatch(getFiveDays(city,metric));
+        dispatch(getCurrentCondition(city));
+        dispatch(getFiveDays(city,metric));
     }
 
 
+    
+
+
     React.useEffect(()=>{
-        if(currentCity){
-            dispatch(getFiveDays(currentCity,metric));
+        
+        if(location.state){
+            let city = location.state;
+            selectCityHandler(city);
+            location.state = null;
+        }else{
+            if(currentCity){
+
+                dispatch(getFiveDays(currentCity,metric));
+            }else{
+                navigator.geolocation.getCurrentPosition((position)=>{
+                    dispatch(getCityByLocation(position.coords.latitude,position.coords.longitude));
+                })
+            }
         }
+            
     },[metric])
 
 
@@ -118,7 +133,9 @@ const Home = () => {
                     <Grid item xs={12}>
                         <Grid container style={{padding:'0 50px'}} >
                             <Grid item xs={6} className={classes.dataTitle} >
-                                    <h4>{currentCity.LocalizedName}</h4>
+                                    <h4>{currentCity.LocalizedName} {usingLocation && <LocationOnIcon />}</h4>
+                                    
+
                                    {metric ? 
                                         <h4>{currentCondition.Temperature.Metric.Value}&deg;{currentCondition.Temperature.Metric.Unit}</h4> 
                                         : 
@@ -126,7 +143,13 @@ const Home = () => {
                                     } 
                             </Grid>
                             <Grid item xs={6} className={classes.dataActions}>
-                                {inFavorites(currentCity) ? <p>in Favorite</p> : <Button onClick={()=>dispatch(AddToFavorite(currentCity))} variant='contained'>Add To Favorite</Button>}
+                                {inFavorites(currentCity) ? 
+                                <Button onClick={()=>dispatch(removeFromFavorites(currentCity))} color='error' variant='contained'>Remove To Favorite</Button>
+                                : 
+                                <Button onClick={()=>dispatch(AddToFavorite(currentCity))} variant='contained'>Add To Favorite</Button>
+                                }
+                                
+
                             </Grid>
                         </Grid>
                     </Grid>
@@ -145,6 +168,9 @@ const Home = () => {
                             ))}
                         </Grid>
                     </Grid>
+
+
+                    
 
                
 
