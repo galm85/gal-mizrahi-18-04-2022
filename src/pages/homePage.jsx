@@ -7,6 +7,8 @@ import {fiveDaysDemo,currentCityDataDemo,currentCityDemo} from '../data/data';
 import {useDispatch, useSelector} from 'react-redux';
 import { AddToFavorite } from '../redux/actions/settingActions';
 import { getCurrentCondition,getFiveDays, setCurrentCity } from '../redux/actions/weatherActions';
+import DayCard from '../components/dayCard';
+import { padding } from '@mui/system';
 
 const useStyles = makeStyles(theme=>({
     homeContainer:{
@@ -27,52 +29,37 @@ const useStyles = makeStyles(theme=>({
         display:'flex',
         flexDirection:'column',
         width:'100%',
-        background:'red'
-    },
-    dataHeader:{
-        marginBottom:'100px'
-    },
+        
+        padding:'50px 20px'
+    }, 
     dataTitle:{
-        display:'flex',
-        alignItems:'center'
+        paddingLeft:'20px',
+        fontFamily:theme.fonts.mainFont,
+        fontSize:'2rem',
+        "& $h4":{
+            fontWeight:theme.fontW.light
+        } 
     },
     dataActions:{
         display:'flex',
         justifyContent:'right'
    },
-   dataContent:{
-       display:'flex',
-       flexDirection:'column',
-       alignItems:'center',
-       justifyContent:'center',
-       width:'100%',
-
-       '& $h1':{
-           textAlign:'center',
-           marginBottom:'50px',
-           fontFamily:theme.fonts.mainFont,
-           fontWeight:theme.fontW.bold,
-           fontSize:'3rem'
+   main:{
+       textAlign:'center',
+       paddingBottom:'50px',
+       
+       "& $img":{
+           width:'20%',
        },
-       '& .forcast':{
-        background:'green',
-        width:'100%',
-        display:'flex',
-        justifyContent:'space-around',
-        
-        "& .day":{
-            width:'100%',
-            background:'blue',
-            fontSize:'3rem',
-            display:'flex',
-            flexDirection:'column',
-            alignItems:'center',
-            justifyContent:'center',
-            background:'yellow'
-
-                }
+       "& $h1":{
+           fontFamily:theme.fonts.mainFont,
+           fontSize:'3rem'
        }
-
+   },
+   forcast:{
+      display:'flex',
+      alignItems:'center',
+      justifyContent:'center'
    }
 }))
 
@@ -80,37 +67,30 @@ const Home = () => {
 
     const dispatch = useDispatch();
     const classes = useStyles();
-    // const [currentCity,setCurrentCity] = React.useState(currentCityDemo);
-    // const [currentCityData,setCurrentCityData] = React.useState(currentCityDataDemo);
-    // const [fiveDays,setFiveDays] = React.useState(fiveDaysDemo);
 
     const currentCity = useSelector(state=>state.weatherReducer.currentCity);
     const fiveDays = useSelector(state=>state.weatherReducer.fiveDays);
     const correntCondition = useSelector(state=>state.weatherReducer.currentCondition);
+    const favorites = useSelector(state=>state.settingReducer.favorites);
+
    
 
-    const getDay = (date)=>{
-        const days = ['Sun','Mun','Tus','Wen','Thr','Fri','Sat'];
-        let day =  new Date(date).getDay();
-        return days[day];  
+    const inFavorites = (city)=>{
+        let infavorite = false;
+        favorites.forEach(fav=>{
+            if(fav.Key === city.Key){
+                infavorite = true;
+            }
+        })
+        return infavorite;
     }
 
-    // const getFiveDays = async (city)=>{
-    //     const res = await axios.get(`http://dataservice.accuweather.com/forecasts/v1/daily/5day/${city.Key}?apikey=mksSHBCIp7xcjFWSgCFksTh6rM3HjwuF&metric=true`);
-    //     setFiveDays(res.data.DailyForecasts);
-    // }
 
     const selectCityHandler = async(city)=>{
         
         dispatch(setCurrentCity(city));
        await dispatch(getCurrentCondition(city));
        await dispatch(getFiveDays(city));
-        // const url = `http://dataservice.accuweather.com/currentconditions/v1/${city.Key}?apikey=mksSHBCIp7xcjFWSgCFksTh6rM3HjwuF`;
-        // const res = await axios.get(url);
-        // setCurrentCityData(res.data[0]);
-
-        // getFiveDays(city);
-        
     }
 
 
@@ -127,42 +107,40 @@ const Home = () => {
 
 
             {(currentCity && correntCondition && fiveDays) &&
-            <div  className={classes.dataContainer} >
+            <Grid container  className={classes.dataContainer} >
 
-                <Grid container className={classes.dataHeader} style={{display:'flex'}} >
-                    <Grid item sm={6} className={classes.dataTitle} >
-                        <img src="https://static.timesofisrael.com/www/uploads/2020/02/Untitled-4-6.jpg" width='100px' alt="" />
-                        <div className="city-title">
-                            <h4>{currentCity.LocalizedName}</h4>
-                            <h4>{correntCondition.Temperature.Metric.Value}</h4>
-                        </div>
+                    <Grid item xs={12}>
+                        <Grid container style={{padding:'0 50px'}} >
+                            <Grid item xs={6} className={classes.dataTitle} >
+                                    <h4>{currentCity.LocalizedName}</h4>
+                                    <h4>{correntCondition.Temperature.Metric.Value}&deg;C</h4>
+                            </Grid>
+                            <Grid item xs={6} className={classes.dataActions}>
+                                {inFavorites(currentCity) ? <p>in Favorite</p> : <Button onClick={()=>dispatch(AddToFavorite(currentCity))} variant='contained'>Add To Favorite</Button>}
+                            </Grid>
+                        </Grid>
                     </Grid>
-                    <Grid item sm={6} className={classes.dataActions}>
-                        <Button onClick={()=>dispatch(AddToFavorite(currentCity))} variant='contained'>Add To Favorite</Button>
-                    </Grid>
-                </Grid>
-
-                <Grid container className={classes.dataContent}>
-                    
-                    <Grid item sm={12}>
-                        <h1>{currentCity.WeatherText}</h1>
+                        
+                    <Grid item xs={12} className={classes.main}>
+                        <img src={`./images/${correntCondition.WeatherIcon}.png`} alt="" />
+                        <h1>{correntCondition.WeatherText}</h1>
                     </Grid>
 
                     <Grid item sm={12}>
-                        <Grid container className="forcast">
+                        <Grid container className={classes.forcast}>
                             {fiveDays.map((day,index)=>(
-                                <Grid item xs={8} sm={2}  key={index}>
-                                    <div className="day">
-                                        <h6>{getDay(day.Date)}</h6>
-                                        <p>{day.Temperature.Maximum.Value} &#8451;</p>
-                                    </div>
+                                <Grid item xs={6} sm={2}  key={index}>
+                                    <DayCard day={day}/>
                                 </Grid>
                             ))}
                         </Grid>
                     </Grid>
-                </Grid>
 
-            </div>
+               
+
+                
+
+            </Grid>
             }
 
        </Container>

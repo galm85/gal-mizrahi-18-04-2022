@@ -1,7 +1,7 @@
 const initialState = {
     darkMode:false,
     metric:true,
-    favorites:[],
+    favorites: localStorage.getItem('weather') ? JSON.parse(localStorage.getItem('weather')).favorites : [],
 }
 
 
