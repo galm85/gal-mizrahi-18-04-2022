@@ -1,6 +1,6 @@
 const initialState = {
-    darkMode:false,
-    metric:true,
+    darkMode: localStorage.getItem('weather') ? JSON.parse(localStorage.getItem('weather')).darkMode : false,
+    metric:localStorage.getItem('weather') ? JSON.parse(localStorage.getItem('weather')).metric : true,
     favorites: localStorage.getItem('weather') ? JSON.parse(localStorage.getItem('weather')).favorites : [],
 }
 
@@ -8,15 +8,20 @@ const initialState = {
 export const settingReducer = (state=initialState,action)=>{
     switch(action.type){
 
-        case 'darkMode':
+        case 'handleDarkMode':
             return{
                 ...state,
                 darkMode: !state.darkMode
             }
 
+        case 'handleMetric':
+            return{
+                ...state,
+                metric: !state.metric
+            }
+
         case 'addToFavorite':
-            // let newList = [...state.favorites];
-            // newList.push(action.payload);
+            
             return{
                 ...state,
                 favorites:action.payload,

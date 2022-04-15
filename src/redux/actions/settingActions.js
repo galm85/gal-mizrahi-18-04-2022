@@ -1,16 +1,56 @@
 import axios from 'axios';
+import { getFiveDays } from './weatherActions';
 
 
 
 export const handleDarkMode = ()=>(dispatch)=>{
+
+    let weather;
+    
+    if(localStorage.getItem('weather')){
+        weather = JSON.parse(localStorage.getItem('weather'));
+       if(weather.darkMode !== undefined){
+           weather.darkMode = !weather.darkMode;
+       }else{
+           weather.darkMode = true;
+       }
+       localStorage.setItem('weather',JSON.stringify(weather));
+
+    }else{
+        weather = {darkMode:true};
+        localStorage.setItem('weather',JSON.stringify(weather));
+    }
+
     dispatch({
-        type:'darkMode'
+        type:'handleDarkMode'
     })
 }
 
 
+export const handleMetric = ()=>(dispatch)=>{
+    let weather;
+    if(localStorage.getItem('weather')){
+        weather = JSON.parse(localStorage.getItem('weather'));
+       if(weather.metric !== undefined){
+           weather.metric = !weather.metric;
+       }else{
+           weather.metric = true;
+       }
+       localStorage.setItem('weather',JSON.stringify(weather));
+
+    }else{
+        weather = {metric:true};
+        localStorage.setItem('weather',JSON.stringify(weather));
+    }
+    dispatch({
+        type:'handleMetric'
+    })
+    
+}
+
+
 export const AddToFavorite = (city)=>(dispatch)=>{
-    console.log(city);
+   
     let weather;
     
     if(localStorage.getItem('weather')){

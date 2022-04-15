@@ -9,8 +9,8 @@ export const setCurrentCity = (city)=>async(dispatch)=>{
     })
 }
 
-export const getFiveDays = (city) => async(dispatch)=>{
-    const res = await axios.get(`http://dataservice.accuweather.com/forecasts/v1/daily/5day/${city.Key}?apikey=mksSHBCIp7xcjFWSgCFksTh6rM3HjwuF&metric=true`);
+export const getFiveDays = (city,metric) => async(dispatch)=>{
+    const res = await axios.get(`http://dataservice.accuweather.com/forecasts/v1/daily/5day/${city.Key}?apikey=mksSHBCIp7xcjFWSgCFksTh6rM3HjwuF&metric=${metric}`);
     dispatch({
         type:'getFiveDays',
         payload:res.data.DailyForecasts

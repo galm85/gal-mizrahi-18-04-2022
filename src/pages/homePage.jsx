@@ -16,9 +16,10 @@ const useStyles = makeStyles(theme=>({
         flexDirection:'column',
         justifyContent:'center',
         alignItems:'center',
+        minHeight:'95vh'
     },
     searchBar:{
-        margin:'5vh',
+        padding:'5vh',
         display:'flex',
         justifyContent:'center',
         alignItems:'center',
@@ -68,10 +69,8 @@ const Home = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
 
-    const currentCity = useSelector(state=>state.weatherReducer.currentCity);
-    const fiveDays = useSelector(state=>state.weatherReducer.fiveDays);
-    const correntCondition = useSelector(state=>state.weatherReducer.currentCondition);
-    const favorites = useSelector(state=>state.settingReducer.favorites);
+    const {currentCity,fiveDays,currentCondition} = useSelector(state=>state.weatherReducer);
+    const {favorites,metric} = useSelector(state=>state.settingReducer);
 
    
 
@@ -90,8 +89,15 @@ const Home = () => {
         
         dispatch(setCurrentCity(city));
        await dispatch(getCurrentCondition(city));
-       await dispatch(getFiveDays(city));
+       await dispatch(getFiveDays(city,metric));
     }
+
+
+    React.useEffect(()=>{
+        if(currentCity){
+            dispatch(getFiveDays(currentCity,metric));
+        }
+    },[metric])
 
 
    
@@ -106,14 +112,18 @@ const Home = () => {
             </Grid>
 
 
-            {(currentCity && correntCondition && fiveDays) &&
+            {(currentCity && currentCondition && fiveDays) &&
             <Grid container  className={classes.dataContainer} >
 
                     <Grid item xs={12}>
                         <Grid container style={{padding:'0 50px'}} >
                             <Grid item xs={6} className={classes.dataTitle} >
                                     <h4>{currentCity.LocalizedName}</h4>
-                                    <h4>{correntCondition.Temperature.Metric.Value}&deg;C</h4>
+                                   {metric ? 
+                                        <h4>{currentCondition.Temperature.Metric.Value}&deg;{currentCondition.Temperature.Metric.Unit}</h4> 
+                                        : 
+                                        <h4>{currentCondition.Temperature.Imperial.Value}&deg;{currentCondition.Temperature.Imperial.Unit}</h4>
+                                    } 
                             </Grid>
                             <Grid item xs={6} className={classes.dataActions}>
                                 {inFavorites(currentCity) ? <p>in Favorite</p> : <Button onClick={()=>dispatch(AddToFavorite(currentCity))} variant='contained'>Add To Favorite</Button>}
@@ -122,8 +132,8 @@ const Home = () => {
                     </Grid>
                         
                     <Grid item xs={12} className={classes.main}>
-                        <img src={`./images/${correntCondition.WeatherIcon}.png`} alt="" />
-                        <h1>{correntCondition.WeatherText}</h1>
+                        <img src={`./images/${currentCondition.WeatherIcon}.png`} alt="" />
+                        <h1>{currentCondition.WeatherText}</h1>
                     </Grid>
 
                     <Grid item sm={12}>
