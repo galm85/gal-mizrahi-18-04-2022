@@ -103,7 +103,6 @@ const Home = () => {
             location.state = null;
         }else{
             if(currentCity){
-
                 dispatch(getFiveDays(currentCity,metric));
             }else{
                 navigator.geolocation.getCurrentPosition((position)=>{
@@ -112,7 +111,7 @@ const Home = () => {
             }
         }
             
-    },[metric])
+    },[metric,currentCity])
 
 
    
@@ -121,7 +120,7 @@ const Home = () => {
        <Container className={classes.homeContainer} >
 
             <Grid container className={classes.searchBar}> 
-                <Grid item sm={12} >
+                <Grid item sm={12} style={{position:'relative',zIndex:20}}>
                     <SearchBar selectCityHandler={selectCityHandler} currentCity={currentCity}/>
                 </Grid>
             </Grid>
@@ -134,9 +133,7 @@ const Home = () => {
                         <Grid container style={{padding:'0 50px'}} >
                             <Grid item xs={6} className={classes.dataTitle} >
                                     <h4>{currentCity.LocalizedName} {usingLocation && <LocationOnIcon />}</h4>
-                                    
-
-                                   {metric ? 
+                                    {metric ? 
                                         <h4>{currentCondition.Temperature.Metric.Value}&deg;{currentCondition.Temperature.Metric.Unit}</h4> 
                                         : 
                                         <h4>{currentCondition.Temperature.Imperial.Value}&deg;{currentCondition.Temperature.Imperial.Unit}</h4>
@@ -148,16 +145,16 @@ const Home = () => {
                                 : 
                                 <Button onClick={()=>dispatch(AddToFavorite(currentCity))} variant='contained'>Add To Favorite</Button>
                                 }
-                                
-
                             </Grid>
                         </Grid>
                     </Grid>
+
                         
                     <Grid item xs={12} className={classes.main}>
                         <img src={`./images/${currentCondition.WeatherIcon}.png`} alt="" />
                         <h1>{currentCondition.WeatherText}</h1>
                     </Grid>
+
 
                     <Grid item sm={12}>
                         <Grid container className={classes.forcast}>
@@ -170,12 +167,7 @@ const Home = () => {
                     </Grid>
 
 
-                    
-
-               
-
-                
-
+            
             </Grid>
             }
 

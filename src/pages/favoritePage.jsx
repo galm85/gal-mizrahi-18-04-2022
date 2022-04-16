@@ -57,7 +57,7 @@ const Favorite = () => {
         {(favorites && favorites.length>0)  ? 
         <>
             {favorites.map((fav,index)=>(
-                <Grid item sm={5} md={2} key={index}>
+                <Grid item xs={10} sm={6} md={2} key={index}>
                     <FavoriteCard city={fav} />
                 </Grid>
             ))}
