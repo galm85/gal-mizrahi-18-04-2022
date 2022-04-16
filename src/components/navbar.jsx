@@ -1,18 +1,13 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
@@ -22,11 +17,11 @@ import { Switch } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
 import { useDispatch,useSelector } from 'react-redux';
-import { handleDarkMode,handleMetric } from '../redux/actions/settingActions';
+import { handleMetric } from '../redux/actions/settingActions';
 import DarkModeSwitch from './darkSwitch';
-import { getFiveDays } from '../redux/actions/weatherActions';
-
-
+import { useNavigate } from 'react-router-dom';
+import MetricSwitch from './metricSwitch';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 
 
@@ -37,6 +32,7 @@ export default function Navbar() {
 
   const {darkMode,metric} = useSelector(state=>state.settingReducer);
   const {currentCity} = useSelector(state=>state.weatherReducer);
+  const navigate = useNavigate()
   const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -79,8 +75,13 @@ export default function Navbar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem style={{display:'flex',justifyContent:'right'}}>
+        <DarkModeSwitch darkMode={darkMode}/>
+      </MenuItem>
+
+      <MenuItem style={{display:'flex',justifyContent:'right'}}>
+          <MetricSwitch /> 
+      </MenuItem>
     </Menu>
   );
 
@@ -101,37 +102,26 @@ export default function Navbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
+      <MenuItem onClick={()=>{handleMobileMenuClose();navigate('/')}}>
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit" >
+            <HomeIcon />
         </IconButton>
-        <p>HomeIcon</p>
+        <p>Home</p>
       </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="Home"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
+
+      <MenuItem onClick={()=>{handleMobileMenuClose();navigate('/favorite')}}>
+        <IconButton size="large" aria-label="Home" color="inherit">          
+            <FavoriteIcon />
         </IconButton>
-        <p>Notifications</p>
+        <p>Favorites</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
+      
+      <MenuItem style={{display:'flex',justifyContent:'right'}}>
+        <DarkModeSwitch darkMode={darkMode}/>
+      </MenuItem>
+
+      <MenuItem style={{display:'flex',justifyContent:'right'}}>
+          <MetricSwitch /> 
       </MenuItem>
     </Menu>
   );
@@ -158,9 +148,20 @@ export default function Navbar() {
                     <FavoriteIcon />
                 </NavLink>
             </IconButton>
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <SettingsIcon />
+            </IconButton>
 
-            <Switch defaultChecked={metric} color="secondary" onChange={()=>{dispatch(handleMetric())}} />
-            <DarkModeSwitch darkMode={darkMode}/>
+            {/* <Switch defaultChecked={metric} color="secondary" onChange={()=>{dispatch(handleMetric())}} />
+            <DarkModeSwitch darkMode={darkMode}/> */}
           </Box>
           
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
