@@ -11,7 +11,8 @@ export const theme = createTheme({
     },
     colors:{
         mainColor:'#003566',
-        gray:'#CFD6EA'
+        gray:'#CFD6EA',
+        purpel:'#480ca8'
     },
     fontW:{
        light:300,

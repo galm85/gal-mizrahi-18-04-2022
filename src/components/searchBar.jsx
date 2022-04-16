@@ -3,6 +3,7 @@ import * as React from 'react'
 import {makeStyles} from '@mui/styles';
 import { useSelector } from 'react-redux';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { apiKey,autoCompleteUrl } from '../utils/config';
 
 const useStyles = makeStyles(theme=>({
     searchBar:{position:'relative'},
@@ -18,8 +19,11 @@ const useStyles = makeStyles(theme=>({
         backgroundColor:'lightblue',
         fontFamily:theme.fonts.mainFont,
         fontWeight:theme.fontW.bold,
+        [theme.breakpoints.down('sm')]:{
+            width:'70%',
+        },
     },
-    btn:{
+    searchBtn:{
         border:'none',
         height:'60px',
         width:'10%',
@@ -28,7 +32,16 @@ const useStyles = makeStyles(theme=>({
         borderTopRightRadius:'20px',
         borderBottomRightRadius:'20px',
         background:'lightblue',
-        borderLeft:'1px solid white'
+        borderLeft:'1px solid white',
+        transitionDuration:'0.2s',
+        fontFamily:theme.fonts.mainFont,
+        '&:hover':{
+            background:theme.colors.purpel,
+            color:'white'
+        },
+        [theme.breakpoints.down('sm')]:{
+            width:'30%',
+            },
     },
     suggestions:{
         display:'flex',
@@ -45,8 +58,10 @@ const useStyles = makeStyles(theme=>({
         borderBottomRightRadius:'10px',
         borderRadius:'10px',
         marginTop:'5px',
-        boxShadow:'1px 1px 10px rgba(0,0,0,0.3)'
-       
+        boxShadow:'1px 1px 10px rgba(0,0,0,0.3)',
+        [theme.breakpoints.down('sm')]:{
+            width:'100%',
+            },
         
     },
     suggest:{
@@ -56,10 +71,14 @@ const useStyles = makeStyles(theme=>({
         fontFamily:theme.fonts.mainFont,
         letterSpacing:'0.5px',
         transitionDuration:'0.1s',
+        display:'flex',
         "&:hover":{
             backgroundColor:theme.colors.mainColor,
             color:'white',
-        
+        },
+        "&:first-child":{
+            color:'white',
+            background:theme.colors.mainColor,
         }
     },
     popup:{
@@ -73,15 +92,20 @@ const useStyles = makeStyles(theme=>({
 
 const SearchBar = ({selectCityHandler}) => {
 
-    const {favorites} = useSelector(state=>state.settingReducer)
     const classes = useStyles();
+    const {favorites} = useSelector(state=>state.settingReducer)
     const [value,setValue] = React.useState('');
+    const [error,setError] = React.useState(null);
     const [suggestions,setSuggestions] = React.useState([]);
+
+    
     
     const handleChange = async(e)=>{
         let param = e.target.value;
         setValue(e.target.value);
-        autoComplete(param);
+        let results =  await autoComplete(param);
+        handleError(param,results);
+        
     }
 
     const inFavorites = (city)=>{
@@ -94,21 +118,46 @@ const SearchBar = ({selectCityHandler}) => {
         return infavorite;
     }
 
+    const handleError = (value,results)=>{
+        if(value !== '' && results < 1){
+            setError('*No City Match');
+        }else{
+            setError(null);
+        }
+    }
+
+
+    const handleSelect = (city=null)=>{
+        if(city){
+            selectCityHandler(city);
+            setValue(city.LocalizedName);
+        }else{
+            selectCityHandler(suggestions[0]);
+            setValue(suggestions[0].LocalizedName);
+        }
+
+        setSuggestions([]);
+        
+    }
 
     const autoComplete = async(value)=>{
-        const res = await axios.get(`http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=mksSHBCIp7xcjFWSgCFksTh6rM3HjwuF&q=${value}`)
+        const res = await axios.get(`${autoCompleteUrl}?apikey=${apiKey}&q=${value}`)
         setSuggestions(res.data);
+        return res.data.length;
     }
 
 
     return ( 
         <div className={classes.searchBar}>
-            <input type="text" className={classes.input} value={value} onChange={handleChange} />
-            <button className={classes.btn}>Search</button>
+            <input  type="text" className={classes.input} value={value} onChange={handleChange} />
+            <button className={classes.searchBtn} disabled={suggestions.length === 0} onClick={()=>handleSelect()}>Search</button>
+            
+            {error && <p style={{color:'red'}}>{error}</p>}
+            
             {suggestions.length > 0 && 
                 <div className={classes.suggestions}>
                     {suggestions.map(suggest=>(
-                        <div key={suggest.Key} className={classes.suggest} style={{display:'flex'}} onClick={()=>{setSuggestions([]); selectCityHandler({...suggest})}}>
+                        <div key={suggest.Key} className={classes.suggest}  onClick={()=>handleSelect(suggest)}>
                             <p style={{flex:1}}>{suggest.LocalizedName}</p>
                             {inFavorites(suggest) && <span><FavoriteIcon fontSize='small' color='error'/></span>}
                         </div>

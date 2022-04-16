@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme=>({
             color:"white"
         }
     },
+    darkMode:{
+        color:'white'
+    }
 }))
 
 const Favorite = () => {
@@ -52,13 +55,13 @@ const Favorite = () => {
 
         <Divider style={{margin:'30px 0',border:darkMode ? '0.2px solid white' :'0.2px solid black'}}/>
 
-        <Grid container style={{display:'flex',justifyContent:'center'}}>
+        <Grid container style={{display:'flex',justifyContent:'center'}} className={darkMode ? `${classes.darkMode}` : '' } >
       
         {(favorites && favorites.length>0)  ? 
         <>
             {favorites.map((fav,index)=>(
                 <Grid item xs={10} sm={6} md={2} key={index}>
-                    <FavoriteCard city={fav} />
+                    <FavoriteCard city={fav} darkMode={darkMode} />
                 </Grid>
             ))}
         </>

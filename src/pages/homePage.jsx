@@ -8,8 +8,9 @@ import { AddToFavorite, removeFromFavorites } from '../redux/actions/settingActi
 import { getCurrentCondition,getFiveDays, setCurrentCity,getCityByLocation} from '../redux/actions/weatherActions';
 import DayCard from '../components/dayCard';
 import { useLocation } from 'react-router-dom';
-import DetailsModal from '../components/detailsModal';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const useStyles = makeStyles(theme=>({
     homeContainer:{
@@ -31,27 +32,38 @@ const useStyles = makeStyles(theme=>({
         display:'flex',
         flexDirection:'column',
         width:'100%',
-        
         padding:'50px 20px'
     }, 
+    dataHeader:{
+        display:'flex',
+        justifyContent:'space-between',
+        alignItems:'center'
+    },
     dataTitle:{
         paddingLeft:'20px',
         fontFamily:theme.fonts.mainFont,
         fontSize:'2rem',
         "& $h4":{
             fontWeight:theme.fontW.light
-        } 
+        },
+        [theme.breakpoints.down('sm')]:{
+            fontSize:'1.5rem',
+            marginBottom:'20px'
+         },
     },
     dataActions:{
         display:'flex',
-        justifyContent:'right'
+        justifyContent:'right',
    },
    main:{
        textAlign:'center',
        paddingBottom:'50px',
-       
        "& $img":{
            width:'20%',
+           marginTop:'30px',
+           [theme.breakpoints.down('sm')]:{
+            width:'90%',
+            },
        },
        "& $h1":{
            fontFamily:theme.fonts.mainFont,
@@ -61,17 +73,23 @@ const useStyles = makeStyles(theme=>({
    forcast:{
       display:'flex',
       alignItems:'center',
-      justifyContent:'center'
+      justifyContent:'center',
+      
+   },
+
+   darkMode:{
+       color:'white'
    }
+
+
 }))
 
 const Home = () => {
 
     const dispatch = useDispatch();
-    const classes = useStyles();
-    const location = useLocation();
+    const {favorites,metric,darkMode} = useSelector(state=>state.settingReducer);
     const {currentCity,fiveDays,currentCondition,usingLocation} = useSelector(state=>state.weatherReducer);
-    const {favorites,metric} = useSelector(state=>state.settingReducer);
+    const classes = useStyles(darkMode);
    
 
     const inFavorites = (city)=>{
@@ -91,25 +109,16 @@ const Home = () => {
         dispatch(getFiveDays(city,metric));
     }
 
-
-    
-
-
     React.useEffect(()=>{
-        
-        if(location.state){
-            let city = location.state;
-            selectCityHandler(city);
-            location.state = null;
+        if(!currentCity){
+            navigator.geolocation.getCurrentPosition((position)=>{
+                dispatch(getCityByLocation(position.coords.latitude,position.coords.longitude));
+           })     
         }else{
-            if(currentCity){
-                dispatch(getFiveDays(currentCity,metric));
-            }else{
-                navigator.geolocation.getCurrentPosition((position)=>{
-                    dispatch(getCityByLocation(position.coords.latitude,position.coords.longitude));
-                })
-            }
+            dispatch(getCurrentCondition(currentCity));
+            dispatch(getFiveDays(currentCity,metric));
         }
+      
             
     },[metric,currentCity])
 
@@ -127,11 +136,12 @@ const Home = () => {
 
 
             {(currentCity && currentCondition && fiveDays) &&
-            <Grid container  className={classes.dataContainer} >
+            <Grid container  className={darkMode ? `${classes.dataContainer} ${classes.darkMode}` : classes.dataContainer } >
 
                     <Grid item xs={12}>
-                        <Grid container style={{padding:'0 50px'}} >
-                            <Grid item xs={6} className={classes.dataTitle} >
+                        <Grid container className={classes.dataHeader}>
+                            
+                            <Grid item xs={10} className={classes.dataTitle} >
                                     <h4>{currentCity.LocalizedName} {usingLocation && <LocationOnIcon />}</h4>
                                     {metric ? 
                                         <h4>{currentCondition.Temperature.Metric.Value}&deg;{currentCondition.Temperature.Metric.Unit}</h4> 
@@ -139,13 +149,14 @@ const Home = () => {
                                         <h4>{currentCondition.Temperature.Imperial.Value}&deg;{currentCondition.Temperature.Imperial.Unit}</h4>
                                     } 
                             </Grid>
-                            <Grid item xs={6} className={classes.dataActions}>
+                            <Grid item xs={2} className={classes.dataActions}>
                                 {inFavorites(currentCity) ? 
-                                <Button onClick={()=>dispatch(removeFromFavorites(currentCity))} color='error' variant='contained'>Remove To Favorite</Button>
+                                <FavoriteIcon onClick={()=>dispatch(removeFromFavorites(currentCity))} style={{position:'relative',zIndex:50}} color='primary' fontSize='large'/>
                                 : 
-                                <Button onClick={()=>dispatch(AddToFavorite(currentCity))} variant='contained'>Add To Favorite</Button>
+                                <FavoriteBorderIcon onClick={()=>dispatch(AddToFavorite(currentCity))} style={{position:'relative',zIndex:50}} color='primary' fontSize='large'/>
                                 }
                             </Grid>
+
                         </Grid>
                     </Grid>
 
@@ -154,13 +165,14 @@ const Home = () => {
                         <img src={`./images/${currentCondition.WeatherIcon}.png`} alt="" />
                         <h1>{currentCondition.WeatherText}</h1>
                     </Grid>
-
+                
+                    
 
                     <Grid item sm={12}>
-                        <Grid container className={classes.forcast}>
+                        <Grid container  className={classes.forcast}>
                             {fiveDays.map((day,index)=>(
-                                <Grid item xs={6} sm={2}  key={index}>
-                                    <DayCard day={day}/>
+                                <Grid item xs={8} sm={2}  key={index}>
+                                    <DayCard day={day} darkMode={darkMode}/>
                                 </Grid>
                             ))}
                         </Grid>
