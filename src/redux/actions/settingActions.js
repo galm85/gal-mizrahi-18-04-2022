@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export const handleDarkMode = ()=>(dispatch)=>{
 
     let weather;
-    
+
     if(localStorage.getItem('weather')){
         weather = JSON.parse(localStorage.getItem('weather'));
        if(weather.darkMode !== undefined){
@@ -55,12 +55,15 @@ export const AddToFavorite = (city)=>(dispatch)=>{
     
     if(localStorage.getItem('weather')){
         weather = JSON.parse(localStorage.getItem('weather'));
-        weather.favorites.push(city);
-        localStorage.setItem('weather',JSON.stringify(weather));
+        if(weather.favorites){
+            weather.favorites.push(city); 
+        }else{
+            weather = {...weather,favorites:[city]};
+        }
     }else{
-        weather = {...weather,favorites:[city]};
-        localStorage.setItem('weather',JSON.stringify(weather));
+        weather = {favorites:[city]};
     }
+    localStorage.setItem('weather',JSON.stringify(weather));
 
     dispatch({
         type:'addToFavorite',

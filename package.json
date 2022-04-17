@@ -1,6 +1,7 @@
 {
   "name": "herolo-w-app",
   "version": "0.1.0",
+  "homepage": "https://herolo-weather-task-gal.netlify.app",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.0",

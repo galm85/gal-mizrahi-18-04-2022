@@ -107,11 +107,14 @@ const Home = () => {
 
     const inFavorites = (city)=>{
         let infavorite = false;
-        favorites.forEach(fav=>{
-            if(fav.Key === city.Key){
-                infavorite = true;
+            if(favorites){
+                favorites.forEach(fav=>{
+                    if(fav.Key === city.Key){
+                        infavorite = true;
+                    }
+                })
             }
-        })
+                
         return infavorite;
     }
 

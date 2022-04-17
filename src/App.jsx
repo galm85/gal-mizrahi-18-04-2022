@@ -10,6 +10,8 @@ import Navbar from './components/navbar';
 import Home from './pages/homePage';
 import Favorite from './pages/favoritePage';
 
+
+
 function App() {
 
   const darkMode = useSelector(state=>state.settingReducer.darkMode);  
