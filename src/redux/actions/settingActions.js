@@ -66,7 +66,7 @@ export const AddToFavorite = (city)=>(dispatch)=>{
         type:'addToFavorite',
         payload:weather.favorites,
     })
-    toast.info(`${city.LocalizedName} add to your favorites`)
+    toast.info(`${city.LocalizedName} added to your favorites List`)
 }
 
 
@@ -93,7 +93,7 @@ export const removeFromFavorites = (city)=>async(dispatch)=>{
         type:'removeFromFavorites',
         payload:weather.favorites
     })
-    toast.error(`${city.LocalizedName} Revoved from your favorites`)
+    toast.error(`${city.LocalizedName} Removed from your favorites List`)
 }
 
 

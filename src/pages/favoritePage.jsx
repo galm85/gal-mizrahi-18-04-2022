@@ -1,9 +1,10 @@
-import { Divider, Grid } from '@mui/material';
+import { Button, Divider, Grid } from '@mui/material';
 import * as React from 'react';
 import { useDispatch,useSelector } from 'react-redux';
 import FavoriteCard from '../components/favoriteCard';
 import { getAllFavorites, removeFromFavorites } from '../redux/actions/settingActions';
 import { makeStyles } from '@mui/styles';
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles(theme=>({
@@ -13,7 +14,8 @@ const useStyles = makeStyles(theme=>({
             fontFamily:theme.fonts.mainFont,
             textAlign:'center',
             color:"black",
-            fontWeight:theme.fontW.light
+            fontWeight:theme.fontW.light,
+            
         }
     },
     headerDark:{
@@ -23,6 +25,11 @@ const useStyles = makeStyles(theme=>({
     },
     darkMode:{
         color:'white'
+    },
+    emptyMessage:{
+        fontFamily:theme.fonts.mainFont,
+        fontWeight:theme.fontW.light,
+        fontStyle:'italic'
     }
 }))
 
@@ -54,18 +61,17 @@ const Favorite = () => {
                     {(favorites && favorites.length>0)  ? 
                     <>
                         {favorites.map((fav,index)=>(
-                    
-
                             <Grid item xs={10} sm={6} md={4} lg={3} xl={2} key={index}>
                                 <FavoriteCard city={fav} darkMode={darkMode} />
                             </Grid>
-                    
                         ))}
                     </>
                     :
-                    <>
-                        <h1>No Favorites yet</h1>
-                    </>  
+                    <div style={{display:'flex',flexDirection:'column',alignItems:'center'}}>
+                    <h1 className={classes.emptyMessage}>No Favorites yet</h1>
+                    <Link style={{textDecoration:'none',marginTop:'30px'}} to='/'><Button color='secondary'variant="contained">Back To APP</Button></Link>
+                    </div>
+ 
                 }
 
             </Grid>

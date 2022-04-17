@@ -20,7 +20,7 @@ function App() {
           <Navbar />
       </header>
 
-      <main className={darkMode ? 'dark' : ''} >
+      <main className={darkMode ? 'dark' : 'light'} >
         <ToastContainer position="top-right" theme={darkMode ? 'colored' :'dark'}/>
 
         <Routes>

@@ -139,12 +139,12 @@ export default function Navbar() {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }} style={{alignItems:'center'}}>
             
             <IconButton size="large" aria-label="show 4 new mails" >
-                <NavLink to='/' style={{color:'white'}}>
+                <NavLink className={(navData)=>navData.isActive ? 'activeNav' : 'nonActive'} to='/' >
                     <HomeIcon />
                 </NavLink>
             </IconButton>
             <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-                <NavLink to='/favorite' style={{color:'white'}}>
+                <NavLink className={(navData)=>navData.isActive ? 'activeNav' : 'nonActive'} to='/favorite' >
                     <FavoriteIcon />
                 </NavLink>
             </IconButton>
@@ -157,7 +157,9 @@ export default function Navbar() {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
+              <NavLink to='#' style={{color:'white'}}>
               <SettingsIcon />
+              </NavLink>
             </IconButton>
 
             {/* <Switch defaultChecked={metric} color="secondary" onChange={()=>{dispatch(handleMetric())}} />

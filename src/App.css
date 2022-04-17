@@ -30,6 +30,29 @@ footer{
 
 
 .dark{
-  background-color: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.85);
+  transition-duration: 1s;
 }
 
+.light{
+ 
+  background: #36D1DC;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #5B86E5, #36D1DC);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #a4c9df, #3694dc); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  transition-duration: 1s;
+  
+
+
+}
+
+
+.activeNav{
+  color:#4fff09;
+  
+  
+
+}
+
+.nonActive{
+  color:white;
+}

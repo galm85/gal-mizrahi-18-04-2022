@@ -90,9 +90,19 @@ const useStyles = makeStyles(theme=>({
     error:{
         fontFamily:theme.fonts.mainFont,
         marginTop:'5px',
-        color:'red',
+        color:'#ef233c',
         fontSize:'20px',
-        fontWeight:theme.fontW.bold
+        fontWeight:theme.fontW.bold,
+        background:'rgba(0,0,0,0.5)',
+        position:'absolute',
+        zIndex:50,
+        left:'50%',
+        borderRadius:'10px',
+        transform:'translate(-50%,10px)',
+        [theme.breakpoints.down('sm')]:{
+            width:'100%',
+        },
+       
     }
 }))
 
@@ -119,7 +129,7 @@ const SearchBar = ({selectCityHandler}) => {
             handleError(param,results);
         }else{            
             setError('Please Insert Only Letters in English')
-            
+            setSuggestions([]);
         }
         
     }

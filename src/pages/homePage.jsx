@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme=>({
         flexDirection:'column',
         justifyContent:'center',
         alignItems:'center',
-        minHeight:'95vh'
+        minHeight:'95vh',
     },
     searchBar:{
         padding:'5vh',
@@ -35,10 +35,14 @@ const useStyles = makeStyles(theme=>({
         textAlign:'center'
     },
     dataContainer:{
+        marginTop:'30px',
         display:'flex',
         flexDirection:'column',
         width:'100%',
-        padding:'50px 20px'
+        padding:'50px 20px',
+        boxShadow:'2px 2px 10px rgba(0,0,0,0.5)',
+        borderRadius:'20px'
+        
     }, 
     dataHeader:{
         display:'flex',
@@ -60,6 +64,7 @@ const useStyles = makeStyles(theme=>({
     dataActions:{
         display:'flex',
         justifyContent:'right',
+        paddingRight:'30px'
    },
    main:{
        textAlign:'center',
@@ -84,7 +89,9 @@ const useStyles = makeStyles(theme=>({
    },
 
    darkMode:{
-       color:'white'
+       color:'white',
+       boxShadow:'2px 2px 20px rgba(255,255,255,0.5)',
+       transitionDuration:'0.5s'
    },
    
 
@@ -161,11 +168,11 @@ const Home = () => {
                                
                                 {inFavorites(currentCity) ? 
                                     <Flip>
-                                        <FavoriteIcon className={classes.rotateBtn} onClick={()=>dispatch(removeFromFavorites(currentCity))} style={{position:'relative',zIndex:50}} color={darkMode ?  'light' : 'primary'} fontSize='large'/>
+                                        <FavoriteIcon onClick={()=>dispatch(removeFromFavorites(currentCity))} style={{position:'relative',zIndex:50}} color={darkMode ?  'light' : 'error'} fontSize='large'/>
                                     </Flip>
                                     : 
                                     
-                                        <FavoriteBorderIcon className={classes.rotateBtn} onClick={()=>dispatch(AddToFavorite(currentCity))} style={{position:'relative',zIndex:50}} color={darkMode ?  'light' : 'primary'} fontSize='large'/>
+                                        <FavoriteBorderIcon  onClick={()=>dispatch(AddToFavorite(currentCity))} style={{position:'relative',zIndex:50}} color={darkMode ?  'light' : 'error'} fontSize='large'/>
                                
                                 }
                              
