@@ -11,6 +11,7 @@ import { useLocation } from 'react-router-dom';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import SearchField from '../components/searchField';
 
 const useStyles = makeStyles(theme=>({
     homeContainer:{
@@ -122,15 +123,24 @@ const Home = () => {
             
     },[metric,currentCity])
 
-
+    
    
 
     return ( 
        <Container className={classes.homeContainer} >
 
-            <Grid container className={classes.searchBar}> 
+            <Grid container  className={classes.searchBar}> 
                 <Grid item sm={12} style={{position:'relative',zIndex:20}}>
                     <SearchBar selectCityHandler={selectCityHandler} currentCity={currentCity}/>
+                </Grid>
+            </Grid>
+
+            <Grid container >
+                <Grid item sm={12} style={{background:'red'}}>
+                    
+
+                    <SearchField/>
+                    
                 </Grid>
             </Grid>
 

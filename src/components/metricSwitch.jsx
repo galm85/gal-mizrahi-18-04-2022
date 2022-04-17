@@ -195,7 +195,7 @@ export default function MetricSwitch() {
       /> */}
       <FormControlLabel
         control={<Android12Switch defaultChecked={metric} onChange={()=>{dispatch(handleMetric())}} />}
-        label={metric ? "C" : "F"}
+        label={metric ? "\xB0C" : "\xB0F"}
       />
       {/* <FormControlLabel
         control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}

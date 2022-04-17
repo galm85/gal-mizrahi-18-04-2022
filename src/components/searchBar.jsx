@@ -4,6 +4,8 @@ import {makeStyles} from '@mui/styles';
 import { useSelector } from 'react-redux';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { apiKey,autoCompleteUrl } from '../utils/config';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 const useStyles = makeStyles(theme=>({
     searchBar:{position:'relative'},
@@ -11,16 +13,16 @@ const useStyles = makeStyles(theme=>({
         height:'60px',
         width:'50%',
         fontSize:'15px',
-        borderTopLeftRadius:'20px',
-        borderBottomLeftRadius:'20px',
+        borderTopLeftRadius:'10px',
+        borderBottomLeftRadius:'10px',
         padding:'0 20px',
         outline:'none',
         border:'none',
-        backgroundColor:'lightblue',
+        backgroundColor:'#ced4da',
         fontFamily:theme.fonts.mainFont,
         fontWeight:theme.fontW.bold,
         [theme.breakpoints.down('sm')]:{
-            width:'70%',
+            width:'80%',
         },
     },
     searchBtn:{
@@ -29,18 +31,18 @@ const useStyles = makeStyles(theme=>({
         width:'10%',
         cursor:'pointer',
         fontSize:'16px',
-        borderTopRightRadius:'20px',
-        borderBottomRightRadius:'20px',
-        background:'lightblue',
-        borderLeft:'1px solid white',
+        borderTopRightRadius:'10px',
+        borderBottomRightRadius:'10px',
+        background:'#ced4da',
+        // borderLeft:'1px solid white',
         transitionDuration:'0.2s',
         fontFamily:theme.fonts.mainFont,
-        '&:hover':{
-            background:theme.colors.purpel,
-            color:'white'
-        },
+        // '&:hover':{
+        //     background:theme.colors.purpel,
+        //     color:'white'
+        // },
         [theme.breakpoints.down('sm')]:{
-            width:'30%',
+            width:'20%',
             },
     },
     suggestions:{
@@ -51,7 +53,7 @@ const useStyles = makeStyles(theme=>({
         zIndex:120,
         left:'50%',
         transform:'translateX(-50%)',
-        background:'lightblue',
+        background:'#ced4da',
         margin:'auto',
         padding:'10px',
         borderBottomLeftRadius:'10px',
@@ -84,8 +86,11 @@ const useStyles = makeStyles(theme=>({
     popup:{
         width:'100%',
         height:'100vh',
-        position:'fixed',
+        position:'absolute',
+        left:0,
+        right:0,
         zIndex:30,
+        
     }
 }))
 
@@ -127,7 +132,10 @@ const SearchBar = ({selectCityHandler}) => {
     }
 
 
-    const handleSelect = (city=null)=>{
+    const handleSelect = (e,city=null)=>{
+       
+            e.preventDefault();
+      
         if(city){
             selectCityHandler(city);
             setValue(city.LocalizedName);
@@ -149,15 +157,17 @@ const SearchBar = ({selectCityHandler}) => {
 
     return ( 
         <div className={classes.searchBar}>
-            <input  type="text" className={classes.input} value={value} onChange={handleChange} />
-            <button className={classes.searchBtn} disabled={suggestions.length === 0} onClick={()=>handleSelect()}>Search</button>
+            <form onSubmit={handleSelect} style={{display:"flex",alignItems:'center',justifyContent:'center',margin:'auto'}}>
+                <input  type="text" className={classes.input} value={value} onChange={handleChange} placeholder="Search" />
+                <button className={classes.searchBtn} disabled={suggestions.length === 0} ><SearchIcon/></button>
+            </form>
             
             {error && <p style={{color:'red'}}>{error}</p>}
             
             {suggestions.length > 0 && 
                 <div className={classes.suggestions}>
                     {suggestions.map(suggest=>(
-                        <div key={suggest.Key} className={classes.suggest}  onClick={()=>handleSelect(suggest)}>
+                        <div key={suggest.Key} className={classes.suggest}  onClick={(e)=>handleSelect(e,suggest)}>
                             <p style={{flex:1}}>{suggest.LocalizedName}</p>
                             {inFavorites(suggest) && <span><FavoriteIcon fontSize='small' color='error'/></span>}
                         </div>
@@ -166,8 +176,9 @@ const SearchBar = ({selectCityHandler}) => {
 
 
             }
-
-            <div className={classes.popup} onClick={()=>setSuggestions([])}></div>
+            {suggestions.length > 0 && 
+                <div className={classes.popup} onClick={()=>setSuggestions([])}></div>
+            }
         </div>
      );
 }
