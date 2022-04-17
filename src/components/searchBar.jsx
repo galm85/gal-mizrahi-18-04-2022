@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { apiKey,autoCompleteUrl } from '../utils/config';
 import SearchIcon from '@mui/icons-material/Search';
-
+import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles(theme=>({
     searchBar:{position:'relative'},
@@ -34,13 +34,8 @@ const useStyles = makeStyles(theme=>({
         borderTopRightRadius:'10px',
         borderBottomRightRadius:'10px',
         background:'#ced4da',
-        // borderLeft:'1px solid white',
         transitionDuration:'0.2s',
         fontFamily:theme.fonts.mainFont,
-        // '&:hover':{
-        //     background:theme.colors.purpel,
-        //     color:'white'
-        // },
         [theme.breakpoints.down('sm')]:{
             width:'20%',
             },
@@ -63,7 +58,7 @@ const useStyles = makeStyles(theme=>({
         boxShadow:'1px 1px 10px rgba(0,0,0,0.3)',
         [theme.breakpoints.down('sm')]:{
             width:'100%',
-            },
+        },
         
     },
     suggest:{
@@ -91,6 +86,13 @@ const useStyles = makeStyles(theme=>({
         right:0,
         zIndex:30,
         
+    },
+    error:{
+        fontFamily:theme.fonts.mainFont,
+        marginTop:'5px',
+        color:'red',
+        fontSize:'20px',
+        fontWeight:theme.fontW.bold
     }
 }))
 
@@ -133,9 +135,7 @@ const SearchBar = ({selectCityHandler}) => {
 
 
     const handleSelect = (e,city=null)=>{
-       
-            e.preventDefault();
-      
+        e.preventDefault();
         if(city){
             selectCityHandler(city);
             setValue(city.LocalizedName);
@@ -143,9 +143,7 @@ const SearchBar = ({selectCityHandler}) => {
             selectCityHandler(suggestions[0]);
             setValue(suggestions[0].LocalizedName);
         }
-
         setSuggestions([]);
-        
     }
 
     const autoComplete = async(value)=>{
@@ -157,12 +155,13 @@ const SearchBar = ({selectCityHandler}) => {
 
     return ( 
         <div className={classes.searchBar}>
+            
             <form onSubmit={handleSelect} style={{display:"flex",alignItems:'center',justifyContent:'center',margin:'auto'}}>
                 <input  type="text" className={classes.input} value={value} onChange={handleChange} placeholder="Search" />
                 <button className={classes.searchBtn} disabled={suggestions.length === 0} ><SearchIcon/></button>
             </form>
             
-            {error && <p style={{color:'red'}}>{error}</p>}
+            {error && <p className={classes.error}>{error}</p>}
             
             {suggestions.length > 0 && 
                 <div className={classes.suggestions}>

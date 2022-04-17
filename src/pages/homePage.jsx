@@ -1,17 +1,25 @@
-import { Button, Container, Grid } from '@mui/material';
-import axios from 'axios';
+import {Container, Grid } from '@mui/material';
 import * as React from 'react';
-import SearchBar from '../components/searchBar';
 import {makeStyles} from '@mui/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import { AddToFavorite, removeFromFavorites } from '../redux/actions/settingActions';
 import { getCurrentCondition,getFiveDays, setCurrentCity,getCityByLocation} from '../redux/actions/weatherActions';
+import Fade from 'react-reveal';
+import Roll from 'react-reveal/Roll';
+import Rotate from 'react-reveal';
+import Bounce from 'react-reveal';
+import Flip from 'react-reveal/Flip';
+
+
+// components
+import Loader from '../components/loader';
+import SearchBar from '../components/searchBar';
 import DayCard from '../components/dayCard';
-import { useLocation } from 'react-router-dom';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+
+// icons
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import SearchField from '../components/searchField';
 
 const useStyles = makeStyles(theme=>({
     homeContainer:{
@@ -80,8 +88,8 @@ const useStyles = makeStyles(theme=>({
 
    darkMode:{
        color:'white'
-   }
-
+   },
+   
 
 }))
 
@@ -109,6 +117,7 @@ const Home = () => {
         dispatch(getCurrentCondition(city));
         dispatch(getFiveDays(city,metric));
     }
+    
 
     React.useEffect(()=>{
         if(!currentCity){
@@ -118,9 +127,8 @@ const Home = () => {
         }else{
             dispatch(getCurrentCondition(currentCity));
             dispatch(getFiveDays(currentCity,metric));
-        }
-      
             
+        }   
     },[metric,currentCity])
 
     
@@ -129,28 +137,21 @@ const Home = () => {
     return ( 
        <Container className={classes.homeContainer} >
 
+            {/* Search Bar */}
             <Grid container  className={classes.searchBar}> 
                 <Grid item sm={12} style={{position:'relative',zIndex:20}}>
                     <SearchBar selectCityHandler={selectCityHandler} currentCity={currentCity}/>
                 </Grid>
             </Grid>
-
-            <Grid container >
-                <Grid item sm={12} style={{background:'red'}}>
-                    
-
-                    <SearchField/>
-                    
-                </Grid>
-            </Grid>
+            {/* End Search Bar */}
 
 
-            {(currentCity && currentCondition && fiveDays) &&
+            {/* Weather Details */}
+            {(currentCity && currentCondition && fiveDays) ?
             <Grid container  className={darkMode ? `${classes.dataContainer} ${classes.darkMode}` : classes.dataContainer } >
 
                     <Grid item xs={12}>
                         <Grid container className={classes.dataHeader}>
-                            
                             <Grid item xs={10} className={classes.dataTitle} >
                                     <h4>{currentCity.LocalizedName} {usingLocation && <LocationOnIcon />}</h4>
                                     {metric ? 
@@ -160,38 +161,57 @@ const Home = () => {
                                     } 
                             </Grid>
                             <Grid item xs={2} className={classes.dataActions}>
+                               
                                 {inFavorites(currentCity) ? 
-                                <FavoriteIcon onClick={()=>dispatch(removeFromFavorites(currentCity))} style={{position:'relative',zIndex:50}} color='primary' fontSize='large'/>
-                                : 
-                                <FavoriteBorderIcon onClick={()=>dispatch(AddToFavorite(currentCity))} style={{position:'relative',zIndex:50}} color='primary' fontSize='large'/>
+                                    <Flip>
+                                        <FavoriteIcon className={classes.rotateBtn} onClick={()=>dispatch(removeFromFavorites(currentCity))} style={{position:'relative',zIndex:50}} color={darkMode ?  'light' : 'primary'} fontSize='large'/>
+                                    </Flip>
+                                    : 
+                                    
+                                        <FavoriteBorderIcon className={classes.rotateBtn} onClick={()=>dispatch(AddToFavorite(currentCity))} style={{position:'relative',zIndex:50}} color={darkMode ?  'light' : 'primary'} fontSize='large'/>
+                               
                                 }
+                             
                             </Grid>
-
                         </Grid>
                     </Grid>
 
-                        
+                   
                     <Grid item xs={12} className={classes.main}>
+                    <Fade bottom cascade>
                         <img src={`./images/${currentCondition.WeatherIcon}.png`} alt="" />
                         <h1>{currentCondition.WeatherText}</h1>
+                    </Fade>
                     </Grid>
                 
                     
 
                     <Grid item sm={12}>
+                            <Fade right cascade>
                         <Grid container  className={classes.forcast}>
                             {fiveDays.map((day,index)=>(
                                 <Grid item xs={8} sm={2}  key={index}>
+
                                     <DayCard day={day} darkMode={darkMode}/>
                                 </Grid>
                             ))}
                         </Grid>
+                            </Fade>
                     </Grid>
 
 
             
             </Grid>
+
+            : 
+            
+            <Grid container style={{display:'flex',justifyContent:'center',paddingTop:'100px'}}>
+               <Loader/>
+            </Grid> 
+
             }
+            {/* End Weather Details */}
+        
 
        </Container>
      );

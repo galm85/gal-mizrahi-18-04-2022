@@ -4,6 +4,8 @@ import { useDispatch,useSelector } from 'react-redux';
 import FavoriteCard from '../components/favoriteCard';
 import { getAllFavorites, removeFromFavorites } from '../redux/actions/settingActions';
 import { makeStyles } from '@mui/styles';
+import Fade from 'react-reveal/Fade';
+
 
 const useStyles = makeStyles(theme=>({
     header:{
@@ -11,14 +13,12 @@ const useStyles = makeStyles(theme=>({
         "& $h1":{
             fontFamily:theme.fonts.mainFont,
             textAlign:'center',
-            color:"black"
+            color:"black",
+            fontWeight:theme.fontW.light
         }
     },
     headerDark:{
-        paddingTop:'20px',
-        "& $h1":{
-            fontFamily:theme.fonts.mainFont,
-            textAlign:'center',
+        "& $h1":{     
             color:"white"
         }
     },
@@ -47,22 +47,26 @@ const Favorite = () => {
     return ( 
        <div className="favorite-container">
         <Grid container>
-            <Grid item xs={12} className={darkMode ? classes.headerDark : classes.header}>
+            <Grid item xs={12} className={darkMode ? `${classes.header} ${classes.headerDark} ` : classes.header}>
                 <h1>My Favorites</h1>
             </Grid>
 
         </Grid>
 
-        <Divider style={{margin:'30px 0',border:darkMode ? '0.2px solid white' :'0.2px solid black'}}/>
+        <Divider style={{margin:'30px 10%',border:darkMode ? '0.2px solid rgba(255,255,255,0.3)' :'0.2px solid rgba(0,0,0,0.15)'}}/>
 
+            
         <Grid container style={{display:'flex',justifyContent:'center'}} className={darkMode ? `${classes.darkMode}` : '' } >
       
         {(favorites && favorites.length>0)  ? 
         <>
             {favorites.map((fav,index)=>(
+           
+
                 <Grid item xs={10} sm={6} md={4} lg={3} xl={2} key={index}>
                     <FavoriteCard city={fav} darkMode={darkMode} />
                 </Grid>
+           
             ))}
         </>
         :
@@ -74,6 +78,7 @@ const Favorite = () => {
 
 
            </Grid>
+  
         
             
 

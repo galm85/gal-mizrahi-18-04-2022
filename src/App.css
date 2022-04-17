@@ -9,12 +9,18 @@
 
 
 
+
 header{
   height: 7vh;
 }
 
+.app-title{
+  font-size: 20px;
+  font-family:Raleway, sans-serif;
+}
+
 main{
-  min-height: 80vh;
+  min-height: 100vh;
   
 }
 
@@ -24,6 +30,6 @@ footer{
 
 
 .dark{
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.85);
 }
 

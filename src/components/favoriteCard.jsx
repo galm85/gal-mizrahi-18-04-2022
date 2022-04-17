@@ -9,6 +9,7 @@ import Loader from './loader';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { setCurrentCity } from '../redux/actions/weatherActions';
 import { apiKey,weather_api } from "../utils/config";
+import Fade from 'react-reveal';
 
 const useStyles = makeStyles(theme=>({
 
@@ -80,6 +81,8 @@ const FavoriteCard = ({city,darkMode}) => {
     }
 
     return ( 
+        <Fade left>
+
         <div className={darkMode ? `${classes.favoriteCard} ${classes.darkMode}` : classes.favoriteCard} onClick={()=>handleNavigate()}>
            <h3>{city.LocalizedName}</h3>
            <small>({city.Key})</small>
@@ -99,6 +102,7 @@ const FavoriteCard = ({city,darkMode}) => {
             }
           
         </div>
+        </Fade>
      );
 }
  

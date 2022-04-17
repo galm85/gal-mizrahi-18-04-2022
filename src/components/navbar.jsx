@@ -131,7 +131,7 @@ export default function Navbar() {
       <AppBar position="static" style={{background: darkMode ? 'black' : '#1565c0'}}>
         <Toolbar >
           <Typography variant="h6" noWrap component="div">
-              Herolo Weather Task
+             <p className='app-title'> Herolo Weather Task</p>
           </Typography>
           
           <Box sx={{ flexGrow: 1 }} />
