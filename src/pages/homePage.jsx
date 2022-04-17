@@ -4,6 +4,7 @@ import {makeStyles} from '@mui/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import { AddToFavorite, removeFromFavorites } from '../redux/actions/settingActions';
 import { getCurrentCondition,getFiveDays, setCurrentCity,getCityByLocation} from '../redux/actions/weatherActions';
+import { defaultCity } from '../utils/config';
 import Fade from 'react-reveal';
 import Flip from 'react-reveal/Flip';
 
@@ -106,16 +107,16 @@ const Home = () => {
    
 
     const inFavorites = (city)=>{
-        let infavorite = false;
+        let isFavorite = false;
             if(favorites){
                 favorites.forEach(fav=>{
                     if(fav.Key === city.Key){
-                        infavorite = true;
+                        isFavorite = true;
                     }
                 })
             }
                 
-        return infavorite;
+        return isFavorite;
     }
 
 
@@ -127,10 +128,20 @@ const Home = () => {
     
 
     React.useEffect(()=>{
+
         if(!currentCity){
-            navigator.geolocation.getCurrentPosition((position)=>{
-                dispatch(getCityByLocation(position.coords.latitude,position.coords.longitude));
-           })     
+            
+            navigator.permissions.query({name:'geolocation'}).then(function(result) {
+              
+                if (result.state === 'prompt' || result.state === 'granted') {
+                    navigator.geolocation.getCurrentPosition((position)=>{
+                        dispatch(getCityByLocation(position.coords.latitude,position.coords.longitude)); 
+                    })
+                } else {
+                    dispatch(setCurrentCity(defaultCity));
+                }
+              });
+                
         }else{
             dispatch(getCurrentCondition(currentCity));
             dispatch(getFiveDays(currentCity,metric));

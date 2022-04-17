@@ -135,14 +135,18 @@ const SearchBar = ({selectCityHandler}) => {
     }
 
     const inFavorites = (city)=>{
-        let infavorite = false;
-        favorites.forEach(fav=>{
-            if(fav.Key === city.Key){
-                infavorite = true;
+        let isFavorite = false;
+            if(favorites){
+                favorites.forEach(fav=>{
+                    if(fav.Key === city.Key){
+                        isFavorite = true;
+                    }
+                })
             }
-        })
-        return infavorite;
+                
+        return isFavorite;
     }
+
 
     const handleError = (value,results)=>{
         if(value !== '' && results < 1){
