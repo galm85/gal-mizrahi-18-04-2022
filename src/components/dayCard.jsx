@@ -49,13 +49,12 @@ const DayCard = ({day,darkMode}) => {
     return ( 
         <div className={classes.dayCard}>
             <div>
-
-            <h5>{getDay(day.Date)}</h5>
-            <img src={`./images/${day.Day.Icon}.png`} alt={day.Day.IconPhrase} />
+                <h5>{getDay(day.Date)}</h5>
+                <img src={`./images/${day.Day.Icon}.png`} alt={day.Day.IconPhrase} />
             </div>
             <div>
-            <h4>Min: {day.Temperature.Minimum.Value}&deg; {day.Temperature.Minimum.Unit} </h4>
-            <h4>Max: {day.Temperature.Maximum.Value}&deg; {day.Temperature.Maximum.Unit} </h4>
+                <h4>Min: {day.Temperature.Minimum.Value}&deg; {day.Temperature.Minimum.Unit} </h4>
+                <h4>Max: {day.Temperature.Maximum.Value}&deg; {day.Temperature.Maximum.Unit} </h4>
             </div>
 
         </div>

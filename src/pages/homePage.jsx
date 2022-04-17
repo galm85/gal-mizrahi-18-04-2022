@@ -5,9 +5,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import { AddToFavorite, removeFromFavorites } from '../redux/actions/settingActions';
 import { getCurrentCondition,getFiveDays, setCurrentCity,getCityByLocation} from '../redux/actions/weatherActions';
 import Fade from 'react-reveal';
-import Roll from 'react-reveal/Roll';
-import Rotate from 'react-reveal';
-import Bounce from 'react-reveal';
 import Flip from 'react-reveal/Flip';
 
 

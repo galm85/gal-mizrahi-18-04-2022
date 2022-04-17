@@ -108,10 +108,19 @@ const SearchBar = ({selectCityHandler}) => {
     
     
     const handleChange = async(e)=>{
+
+        setError('');
         let param = e.target.value;
-        setValue(e.target.value);
-        let results =  await autoComplete(param);
-        handleError(param,results);
+        let regex = new RegExp(/^[a-zA-Z]+$/g);
+        
+        if((regex.test(param)) || (param === '') ){
+            setValue(e.target.value);
+            let results =  await autoComplete(param);
+            handleError(param,results);
+        }else{            
+            setError('Please Insert Only Letters in English')
+            
+        }
         
     }
 
@@ -157,7 +166,7 @@ const SearchBar = ({selectCityHandler}) => {
         <div className={classes.searchBar}>
             
             <form onSubmit={handleSelect} style={{display:"flex",alignItems:'center',justifyContent:'center',margin:'auto'}}>
-                <input  type="text" className={classes.input} value={value} onChange={handleChange} placeholder="Search" />
+                <input  type="text" className={classes.input} value={value} onChange={handleChange} placeholder="Search"/>
                 <button className={classes.searchBtn} disabled={suggestions.length === 0} ><SearchIcon/></button>
             </form>
             
