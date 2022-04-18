@@ -7,8 +7,8 @@ import {useSelector} from 'react-redux';
 
 // components
 import Navbar from './components/navbar';
-import Home from './pages/homePage';
-import Favorite from './pages/favoritePage';
+import WeatherPage from './pages/weatherPage';
+import FavoritesPage from './pages/favoritesPage';
 
 
 
@@ -26,8 +26,8 @@ function App() {
         <ToastContainer position="top-right" theme={darkMode ? 'colored' :'dark'}/>
 
         <Routes>
-          <Route path='/' element={<Home/>} />
-          <Route path='/favorite' element={<Favorite/> } />
+          <Route path='/' element={<WeatherPage/>} />
+          <Route path='/favorite' element={<FavoritesPage/> } />
         </Routes>
       </main>
 

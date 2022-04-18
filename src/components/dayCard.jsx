@@ -40,7 +40,7 @@ const DayCard = ({day,darkMode}) => {
     
 
     const getDay = (date)=>{
-        const days = ['Sun','Mun','Tus','Wen','Thr','Fri','Sat'];
+        const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
         let day =  new Date(date).getDay();
         return days[day];  
     }

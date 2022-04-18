@@ -98,7 +98,7 @@ const useStyles = makeStyles(theme=>({
 
 }))
 
-const Home = () => {
+const WeatherPage = () => {
 
     const dispatch = useDispatch();
     const {favorites,metric,darkMode} = useSelector(state=>state.settingReducer);
@@ -130,17 +130,21 @@ const Home = () => {
     React.useEffect(()=>{
 
         if(!currentCity){
-            
-            navigator.permissions.query({name:'geolocation'}).then(function(result) {
-              
-                if (result.state === 'prompt' || result.state === 'granted') {
-                    navigator.geolocation.getCurrentPosition((position)=>{
-                        dispatch(getCityByLocation(position.coords.latitude,position.coords.longitude)); 
-                    })
-                } else {
-                    dispatch(setCurrentCity(defaultCity));
-                }
-              });
+            if(navigator.permissions && navigator.permissions.query){
+                
+                navigator.permissions.query({name:'geolocation'}).then(function(result) {
+                   
+                    if ( result.state === 'prompt' ||result.state === 'granted') {
+                        navigator.geolocation.getCurrentPosition((position)=>{
+                            dispatch(getCityByLocation(position.coords.latitude,position.coords.longitude)); 
+                        })
+                    } else{
+                        dispatch(setCurrentCity(defaultCity));
+                    }
+                });
+            }else {
+                dispatch(setCurrentCity(defaultCity));
+            }
                 
         }else{
             dispatch(getCurrentCondition(currentCity));
@@ -179,41 +183,37 @@ const Home = () => {
                                     } 
                             </Grid>
                             <Grid item xs={2} className={classes.dataActions}>
-                               
                                 {inFavorites(currentCity) ? 
                                     <Flip>
                                         <FavoriteIcon onClick={()=>dispatch(removeFromFavorites(currentCity))} style={{position:'relative',zIndex:50}} color={darkMode ?  'light' : 'error'} fontSize='large'/>
                                     </Flip>
                                     : 
-                                    
-                                        <FavoriteBorderIcon  onClick={()=>dispatch(AddToFavorite(currentCity))} style={{position:'relative',zIndex:50}} color={darkMode ?  'light' : 'error'} fontSize='large'/>
+                                    <FavoriteBorderIcon  onClick={()=>dispatch(AddToFavorite(currentCity))} style={{position:'relative',zIndex:50}} color={darkMode ?  'light' : 'error'} fontSize='large'/>
                                
                                 }
-                             
                             </Grid>
                         </Grid>
                     </Grid>
 
                    
                     <Grid item xs={12} className={classes.main}>
-                    <Fade bottom cascade>
-                        <img src={`./images/${currentCondition.WeatherIcon}.png`} alt="" />
-                        <h1>{currentCondition.WeatherText}</h1>
-                    </Fade>
+                        <Fade bottom cascade>
+                            <img src={`./images/${currentCondition.WeatherIcon}.png`} alt="" />
+                            <h1>{currentCondition.WeatherText}</h1>
+                        </Fade>
                     </Grid>
                 
                     
 
                     <Grid item sm={12}>
                             <Fade right cascade>
-                        <Grid container  className={classes.forcast}>
-                            {fiveDays.map((day,index)=>(
-                                <Grid item xs={8} sm={2}  key={index}>
-
-                                    <DayCard day={day} darkMode={darkMode}/>
+                                <Grid container  className={classes.forcast}>
+                                    {fiveDays.map((day,index)=>(
+                                        <Grid item xs={8} sm={2}  key={index}>
+                                            <DayCard day={day} darkMode={darkMode}/>
+                                        </Grid>
+                                    ))}
                                 </Grid>
-                            ))}
-                        </Grid>
                             </Fade>
                     </Grid>
 
@@ -235,4 +235,4 @@ const Home = () => {
      );
 }
  
-export default Home;
+export default WeatherPage;

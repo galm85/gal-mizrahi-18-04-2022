@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme=>({
     }
 }))
 
-const Favorite = () => {
+const FavoritesPage = () => {
 
 
     const classes = useStyles();
@@ -81,4 +81,4 @@ const Favorite = () => {
      );
 }
  
-export default Favorite;
+export default FavoritesPage;
