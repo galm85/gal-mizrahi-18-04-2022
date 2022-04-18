@@ -179,13 +179,16 @@ const SearchBar = ({selectCityHandler}) => {
     return ( 
         <div className={classes.searchBar}>
             
+            {/* Input Field */}
             <form onSubmit={handleSelect} style={{display:"flex",alignItems:'center',justifyContent:'center',margin:'auto'}}>
                 <input  type="text" className={classes.input} value={value} onChange={handleChange} placeholder="Search"/>
                 <button className={classes.searchBtn} disabled={suggestions.length === 0} ><SearchIcon/></button>
             </form>
+            {/* End Input Field */}
             
             {error && <p className={classes.error}>{error}</p>}
             
+            {/* Suggestions Box */}
             {suggestions.length > 0 && 
                 <div className={classes.suggestions}>
                     {suggestions.map(suggest=>(
@@ -195,12 +198,11 @@ const SearchBar = ({selectCityHandler}) => {
                         </div>
                     ))}
                 </div>
-
-
             }
-            {suggestions.length > 0 && 
-                <div className={classes.popup} onClick={()=>setSuggestions([])}></div>
-            }
+            {/* End Suggestions Box */}
+            
+            {suggestions.length > 0 && <div className={classes.popup} onClick={()=>setSuggestions([])}></div>}
+        
         </div>
      );
 }

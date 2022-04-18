@@ -3,8 +3,6 @@ import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleMetric } from '../redux/actions/settingActions';
 
@@ -181,31 +179,23 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function MetricSwitch() {
 
+
+
+
+export default function MetricSwitch() {
 
     const dispatch = useDispatch();
     const {metric} = useSelector(state=>state.settingReducer);
 
-  return (
-    <FormGroup>
-      {/* <FormControlLabel
-        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
-       
-      /> */}
-      <FormControlLabel
-        control={<Android12Switch defaultChecked={metric} onChange={()=>{dispatch(handleMetric())}} />}
-        label={metric ? "\xB0C" : "\xB0F"}
-      />
-      {/* <FormControlLabel
-        control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
-        label="iOS style"
-      />
-      <Stack direction="row" spacing={1} alignItems="center">
-        <Typography>Off</Typography>
-        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
-        <Typography>On</Typography>
-      </Stack> */}
-    </FormGroup>
-  );
+    return (
+      <FormGroup>
+        
+        <FormControlLabel
+          control={<Android12Switch defaultChecked={metric} onChange={()=>{dispatch(handleMetric())}} />}
+          label={metric ? "\xB0C" : "\xB0F"}
+        />
+        
+      </FormGroup>
+    );
 }

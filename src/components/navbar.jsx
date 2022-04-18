@@ -1,39 +1,25 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
+import { NavLink } from 'react-router-dom';
+import {AppBar,Box,Toolbar,IconButton,Typography,MenuItem,Menu,} from '@mui/material';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
+// components
+import DarkModeSwitch from './darkSwitch';
+import MetricSwitch from './metricSwitch';
+
+// icons
+import MoreIcon from '@mui/icons-material/MoreVert';
 import HomeIcon from '@mui/icons-material/Home';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Switch } from '@mui/material';
-import { NavLink } from 'react-router-dom';
-
-import { useDispatch,useSelector } from 'react-redux';
-import { handleMetric } from '../redux/actions/settingActions';
-import DarkModeSwitch from './darkSwitch';
-import { useNavigate } from 'react-router-dom';
-import MetricSwitch from './metricSwitch';
 import SettingsIcon from '@mui/icons-material/Settings';
-
-
-
 
 
 
 export default function Navbar() {
 
-  const {darkMode,metric} = useSelector(state=>state.settingReducer);
-  const {currentCity} = useSelector(state=>state.weatherReducer);
+  const {darkMode} = useSelector(state=>state.settingReducer);
   const navigate = useNavigate()
-  const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -158,12 +144,9 @@ export default function Navbar() {
               color="inherit"
             >
               <NavLink to='#' style={{color:'white'}}>
-              <SettingsIcon />
+                <SettingsIcon />
               </NavLink>
             </IconButton>
-
-            {/* <Switch defaultChecked={metric} color="secondary" onChange={()=>{dispatch(handleMetric())}} />
-            <DarkModeSwitch darkMode={darkMode}/> */}
           </Box>
           
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

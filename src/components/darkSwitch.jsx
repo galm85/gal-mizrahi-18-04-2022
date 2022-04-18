@@ -67,7 +67,6 @@ export default function DarkModeSwitch() {
       <FormGroup>
         <FormControlLabel
           control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked={darkMode} onChange={()=>dispatch(handleDarkMode())} />}
-          
         />
       </FormGroup>
     );

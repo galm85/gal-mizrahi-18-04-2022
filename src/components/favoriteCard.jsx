@@ -64,6 +64,7 @@ const FavoriteCard = ({city,darkMode}) => {
     const [loader,setLoader] = React.useState(true);
     const metric = useSelector(state=>state.settingReducer.metric);
 
+    
     const getCondition = async(city)=>{
         const res = await axios.get(`${weather_api}/currentconditions/v1/${city.Key}?apikey=${apiKey}`);
         setCurrentCondition(res.data[0]);
@@ -83,26 +84,26 @@ const FavoriteCard = ({city,darkMode}) => {
 
     return ( 
         <Fade left>
-
-        <div className={darkMode ? `${classes.favoriteCard} ${classes.darkMode}` : classes.favoriteCard} onClick={()=>handleNavigate()}>
-           <h3>{city.LocalizedName}</h3>
-           <small>({city.Key})</small>
-
-            {loader ?  <Loader /> : 
-
-            <>
-                <h2 style={{margin:'10px 0',textAlign:'center'}}>{correntCondition.WeatherText}</h2>
-                <img src={`./images/${correntCondition.WeatherIcon}.png`} alt="" />
-                {metric ? <h3>{correntCondition.Temperature.Metric.Value} &#8451;</h3> : <h3>{correntCondition.Temperature.Imperial.Value} &#8457;</h3>}
+            <div className={darkMode ? `${classes.favoriteCard} ${classes.darkMode}` : classes.favoriteCard} onClick={()=>handleNavigate()}>
                 
-                <div className={classes.btn} onClick={(e)=>{e.stopPropagation();dispatch(removeFromFavorites(city))}}>
-                    <Button  color="error" ><RemoveCircleOutlineIcon/></Button>
-                </div>
-                
-            </>
-            }
-          
-        </div>
+                <h3>{city.LocalizedName}</h3>
+                <small>({city.Key})</small>
+                {loader ?  <Loader /> : 
+                <>
+                    <h2 style={{margin:'10px 0',textAlign:'center'}}>{correntCondition.WeatherText}</h2>
+                    
+                    <img src={`./images/${correntCondition.WeatherIcon}.png`} alt={correntCondition.WeatherText} />
+                    
+                    {metric ? <h3>{correntCondition.Temperature.Metric.Value} &#8451;</h3> : <h3>{correntCondition.Temperature.Imperial.Value} &#8457;</h3>} 
+                    
+                    <div className={classes.btn} onClick={(e)=>{e.stopPropagation();dispatch(removeFromFavorites(city))}}>
+                        <Button  color="error" ><RemoveCircleOutlineIcon/></Button>
+                    </div>
+                    
+                </>
+                }
+            
+            </div>
         </Fade>
      );
 }

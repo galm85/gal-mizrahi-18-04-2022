@@ -8,7 +8,6 @@ import { defaultCity } from '../utils/config';
 import Fade from 'react-reveal';
 import Flip from 'react-reveal/Flip';
 
-
 // components
 import Loader from '../components/loader';
 import SearchBar from '../components/searchBar';
@@ -98,6 +97,7 @@ const useStyles = makeStyles(theme=>({
 
 }))
 
+
 const WeatherPage = () => {
 
     const dispatch = useDispatch();
@@ -170,8 +170,9 @@ const WeatherPage = () => {
 
             {/* Weather Details */}
             {(currentCity && currentCondition && fiveDays) ?
-            <Grid container  className={darkMode ? `${classes.dataContainer} ${classes.darkMode}` : classes.dataContainer } >
+                <Grid container  className={darkMode ? `${classes.dataContainer} ${classes.darkMode}` : classes.dataContainer } >
 
+                    {/* Data Header */}
                     <Grid item xs={12}>
                         <Grid container className={classes.dataHeader}>
                             <Grid item xs={10} className={classes.dataTitle} >
@@ -194,17 +195,20 @@ const WeatherPage = () => {
                             </Grid>
                         </Grid>
                     </Grid>
+                    {/* End Data Header */}
 
-                   
+
+                    {/* Main Current Condition */}
                     <Grid item xs={12} className={classes.main}>
                         <Fade bottom cascade>
                             <img src={`./images/${currentCondition.WeatherIcon}.png`} alt="" />
                             <h1>{currentCondition.WeatherText}</h1>
                         </Fade>
                     </Grid>
-                
+                    {/* End Main Current Condition */}
                     
 
+                    {/* Five Days Forcast */}
                     <Grid item sm={12}>
                             <Fade right cascade>
                                 <Grid container  className={classes.forcast}>
@@ -216,17 +220,19 @@ const WeatherPage = () => {
                                 </Grid>
                             </Fade>
                     </Grid>
-
+                     {/* End Five Days Forcast */}
 
             
-            </Grid>
+                </Grid>
 
-            : 
+                : 
             
-            <Grid container style={{display:'flex',justifyContent:'center',paddingTop:'100px'}}>
-               <Loader/>
-            </Grid> 
-
+                // Loader
+                <Grid container style={{display:'flex',justifyContent:'center',paddingTop:'100px'}}>
+                <Loader/>
+                </Grid> 
+                //  End Loader
+            
             }
             {/* End Weather Details */}
         
