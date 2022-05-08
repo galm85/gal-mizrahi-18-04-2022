@@ -6,6 +6,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { apiKey,autoCompleteUrl } from '../utils/config';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
+import {debounce} from 'lodash';
 
 const useStyles = makeStyles(theme=>({
     searchBar:{position:'relative'},
@@ -116,17 +117,19 @@ const SearchBar = ({selectCityHandler}) => {
     const [suggestions,setSuggestions] = React.useState([]);
 
     
+    const deb = React.useCallback(
+        debounce((text)=>autoComplete(text),1000)
+    ,[])
     
     const handleChange = async(e)=>{
 
         setError('');
         let param = e.target.value;
-        let regex = new RegExp(/^[a-zA-Z]+$/g);
+        let regex = new RegExp(/^[a-zA-Z\s]*$/);
         
         if((regex.test(param)) || (param === '') ){
             setValue(e.target.value);
-            let results =  await autoComplete(param);
-            handleError(param,results);
+            deb(param);
         }else{            
             setError('Please Insert Only Letters in English')
             setSuggestions([]);
@@ -172,7 +175,7 @@ const SearchBar = ({selectCityHandler}) => {
     const autoComplete = async(value)=>{
         const res = await axios.get(`${autoCompleteUrl}?apikey=${apiKey}&q=${value}`)
         setSuggestions(res.data);
-        return res.data.length;
+        handleError(value,res.data.length);
     }
 
 
