@@ -117,9 +117,31 @@ const SearchBar = ({selectCityHandler}) => {
     const [suggestions,setSuggestions] = React.useState([]);
 
     
+    // lodash debounce
     const deb = React.useCallback(
         debounce((text)=>autoComplete(text),1000)
     ,[])
+
+
+    // My custom Debounce
+
+    // const myDeb = (fn,delay=1000)=>{
+    //     let timer;
+    //         return function(...args){
+    //         const context = this;
+    //         if(timer) clearTimeout(timer);
+
+    //         timer = setTimeout(()=>{
+    //             timer = null;
+    //             fn.apply(context,args);
+    //         },delay);
+
+    // }
+    // }
+
+    // const debAutocomplate = React.useCallback(
+    //     myDeb((text)=>autoComplete(text),1000)
+    // ,[])
     
     const handleChange = async(e)=>{
 
@@ -129,7 +151,8 @@ const SearchBar = ({selectCityHandler}) => {
         
         if((regex.test(param)) || (param === '') ){
             setValue(e.target.value);
-            deb(param);
+             deb(param);
+            // debAutocomplate(param);
         }else{            
             setError('Please Insert Only Letters in English')
             setSuggestions([]);
