@@ -121,7 +121,7 @@ const SearchBar = ({selectCityHandler}) => {
 
         setError('');
         let param = e.target.value;
-        let regex = new RegExp(/^[a-zA-Z]+$/g);
+        let regex = new RegExp(/^[a-zA-Z]*$/);
         
         if((regex.test(param)) || (param === '') ){
             setValue(e.target.value);
